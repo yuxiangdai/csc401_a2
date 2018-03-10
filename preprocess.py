@@ -16,11 +16,6 @@ def preprocess(in_sentence, language):
     """
     # TODO: Implement Function
 
-    def dashrepl(matchobj):
-        if matchobj.group(0) == '-': return ' '
-        else: return '-'
-    
-    test = re.sub('-{1,2}', dashrepl, 'pro----gram-files')
 
     def daposrepl(matchobj):
         if matchobj.group(0) in ["d'abord", "d'accord", "d'ailleurs", "d'habitude", "d’abord", "d’accord", "d’ailleurs", "d’habitude"]: 
@@ -55,5 +50,5 @@ def preprocess(in_sentence, language):
     out_sentence = re.sub(r'()\s+()', r"\1 \2", in_sentence) ## really dumb way to stop repeat spaces
     return out_sentence
 
-in_sentence = "Right Hon. Jean Chretien (Prime Minister, Lib."
-preprocess(in_sentence, 'english')
+# in_sentence = "Right Hon. Jean Chretien (Prime Minister, Lib."
+# preprocess(in_sentence, 'english')
