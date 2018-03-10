@@ -206,8 +206,8 @@ def checkef(e, f):
 # AM = align_ibm1(train_dir, num_sentences, max_iter, fn_AM)
 
 
-num_sentences = 100
+# num_sentences = 100
 
-train_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
-AM = align_ibm1(train_dir, num_sentences, 5, "daniel")
-print("len:", len(AM))
+# train_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
+# AM = align_ibm1(train_dir, num_sentences, 5, "testset")
+# print("len:", len(AM))
