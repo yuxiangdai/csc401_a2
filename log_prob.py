@@ -19,6 +19,10 @@ def log_prob(sentence, LM, smoothing=False, delta=0, vocabSize=0):
     """
     
     #TODO: Implement by student.
+
+
+
+
     words = sentence.split()
     
     prob = 1
@@ -32,19 +36,30 @@ def log_prob(sentence, LM, smoothing=False, delta=0, vocabSize=0):
         count_w1w2 = 0
         count_w = 0
         if word in LM['bi'].keys():    
-            next_word = word[index + 1]   
+            next_word = words[index + 1]   
             if next_word in LM['bi'][word].keys():
                 count_w1w2 = LM['bi'][word][next_word]
         
         if word in LM['uni'].keys():  
             count_w = LM['uni'][word]
         
-        prob = prob * (count_w1w2 + delta) / (count_w + delta * vocabSize)
+        if (count_w + delta * vocabSize) == 0:
+            prob = 0
+        else:
+            prob = prob * (count_w1w2 + delta) / (count_w + delta * vocabSize)
             
     log_prob = 0
     if prob != 0:
-        log_prob = log(prob, base=2)
+        log_prob = log(prob, 2)
     else:
         log_prob = float('-inf')
 
     return log_prob
+
+
+# sentence = "Il pourrait y avoir a ce moment-la une plus grand nombre d'ouvertures."
+# language = "f"
+# processed_line = preprocess(sentence, language)
+# with open('test_f.pickle', 'rb') as handle:
+#     LM = pickle.load(handle)
+# print(log_prob(sentence, LM, smoothing=False, delta=0, vocabSize=0))

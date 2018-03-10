@@ -33,10 +33,10 @@ def preprocess(in_sentence, language):
     in_sentence = re.sub(r'()(\(|\)|\[|\]|\}|\{)()', r"\1 \2 \3", in_sentence) ##  parentheses
     in_sentence = re.sub(r'()\-()', r"\1 - \2", in_sentence) ## dash btw parentheses
     in_sentence = re.sub(r'()([+-<>=])()', r"\1 \2 \3", in_sentence) ## math
-    in_sentence = re.sub(r'()(\"+|\'{2,}|\’{2,})()', r"\1 \2 \3", in_sentence) # quotes
+    in_sentence = re.sub(r'()(\"+|\'{2,}|\’{2,}|\`{2,})()', r"\1 \2 \3", in_sentence) # quotes
 
     # add more sentence final puncs, or just add all puncs
-    in_sentence = re.sub(r'()([`~!@#$%^&*\(\)_+{}|:\"<>\?\-\=\[\]\;\'.\/,]+$)', r"\1 \2", in_sentence) # sentence final punctuation
+    in_sentence = re.sub(r'()([`~!@#$%^&*\(\)_+{}|:\"<>?\-\=\[\]\;\'.\/,]+( |)+$)', r"\1 \2", in_sentence) # sentence final punctuation
 
 
     if language == 'french':

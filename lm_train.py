@@ -32,10 +32,12 @@ def lm_train(data_dir, language, fn_LM):
     # all of the data ﬁles in data dir that end in either ‘e’ for English or ‘f’ for French
 
     
-
+    i = 0 
     for root, dirs, files in os.walk(data_dir):
         for file in files:
             if file.endswith("." + language):
+                i += 1
+                print(i)
                 with open(os.path.join(data_dir, file)) as f:
                     for line in f:
                         if line.endswith('\n'):
@@ -62,7 +64,7 @@ def lm_train(data_dir, language, fn_LM):
                             uni[last_word] += 1
                         else:
                             uni[last_word] = 1 
-                        print(words)
+
 
     #Save Model
     language_model = {'uni':uni, 'bi':bi}
@@ -71,7 +73,7 @@ def lm_train(data_dir, language, fn_LM):
         
     return language_model
 
-data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
-language = "e"
-fn_LM = "test"
-lm_train(data_dir, language, fn_LM)
+# data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
+# language = "f"
+# fn_LM = "test_f"
+# lm_train(data_dir, language, fn_LM)
