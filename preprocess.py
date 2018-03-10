@@ -52,5 +52,6 @@ def preprocess(in_sentence, language):
     
     return out_sentence
 
-in_sentence = "4,000"
-preprocess(in_sentence, 'english')
+## Do Testing here, otherwise leave commented
+# in_sentence = "4,000"
+# preprocess(in_sentence, 'english')

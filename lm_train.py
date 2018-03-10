@@ -37,7 +37,7 @@ def lm_train(data_dir, language, fn_LM):
         for file in files:
             if file.endswith("." + language):
                 i += 1
-                print(i)
+                print("lm_train:", i)
                 with open(os.path.join(data_dir, file)) as f:
                     for line in f:
                         if line.endswith('\n'):
@@ -71,9 +71,22 @@ def lm_train(data_dir, language, fn_LM):
     with open(fn_LM+'.pickle', 'wb') as handle:
     	pickle.dump(language_model, handle, protocol=pickle.HIGHEST_PROTOCOL)
         
+    print(language + " file saved at: " + fn_LM + '.pickle' )
     return language_model
 
-# data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
-# language = "f"
-# fn_LM = "Toy_f"
-# lm_train(data_dir, language, fn_LM)
+
+
+# data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Toy/"
+# lm_train(data_dir, "e", "toy_e_temp")
+# lm_train(data_dir, "f", "toy_f_temp")
+
+
+local = True  # Change to false in FTP
+if(local):
+    data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
+else:
+    data_dir = "/u/cs401/A2_SMT/data/Hansard/Training/"
+
+## Create LM_models, uncomment out in final submit
+# lm_train(data_dir, "e", "e_temp")
+# lm_train(data_dir, "f", "f_temp")

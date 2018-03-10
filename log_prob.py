@@ -56,7 +56,7 @@ def log_prob(sentence, LM, smoothing=False, delta=0, vocabSize=0):
 
     return log_prob
 
-
+## Individual sentence testing, can delete in final version
 # sentence = "Il pourrait y avoir a ce moment-la une plus grand nombre d'ouvertures."
 # language = "f"
 # processed_line = preprocess(sentence, language)
