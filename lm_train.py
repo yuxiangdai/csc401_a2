@@ -41,9 +41,9 @@ def lm_train(data_dir, language, fn_LM):
                         if line.endswith('\n'):
                             line = line[:-1]
                         ## Use these two lines once preprocessing is working
-                        # edited_line = preprocess(line, language)
-                        # words = edited_line.split()
-                        words = line.split()
+                        edited_line = preprocess(line, language)
+                        words = edited_line.split()
+                        # words = line.split()
                         for index, word in enumerate(words[:-1]):
                             if word in uni.keys():
                                 uni[word] += 1
@@ -66,12 +66,12 @@ def lm_train(data_dir, language, fn_LM):
 
     #Save Model
     language_model = {'uni':uni, 'bi':bi}
-    # with open(fn_LM+'.pickle', 'wb') as handle:
-    # 	pickle.dump(language_model, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open(fn_LM+'.pickle', 'wb') as handle:
+    	pickle.dump(language_model, handle, protocol=pickle.HIGHEST_PROTOCOL)
         
     return language_model
 
 data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
 language = "e"
-fn_LM = "test2"
+fn_LM = "test"
 lm_train(data_dir, language, fn_LM)

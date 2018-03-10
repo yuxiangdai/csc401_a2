@@ -55,5 +55,5 @@ def preprocess(in_sentence, language):
     out_sentence = re.sub(r'()\s+()', r"\1 \2", in_sentence) ## really dumb way to stop repeat spaces
     return out_sentence
 
-in_sentence = "d’abord, puisqu’accordion, d’ailleurs, d’habitude"
-preprocess(in_sentence, 'french')
+in_sentence = "Right Hon. Jean Chretien (Prime Minister, Lib."
+preprocess(in_sentence, 'english')
