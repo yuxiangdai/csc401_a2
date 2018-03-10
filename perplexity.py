@@ -33,6 +33,7 @@ def preplexity(LM, test_dir, language, smoothing = False, delta = 0):
                 pp = pp + tpp
                 N += len(processed_line.split())
 
+            print(processed_line, tpp)
         opened_file.close()
     if N > 0:
         pp = 2**(-pp/N)
@@ -51,8 +52,8 @@ test_LM = lm_train(data_dir, language, fn_LM)
 # with open(fn_LM + '.pickle', 'rb') as handle:
 #     test_LM = pickle.load(handle)
 print(preplexity(test_LM, test_data_dir, language, False, 0))
-print(preplexity(test_LM, test_data_dir, language, smoothing, 0.01))
-print(preplexity(test_LM, test_data_dir, language, smoothing, 0.05))
-print(preplexity(test_LM, test_data_dir, language, smoothing, 0.1))
-print(preplexity(test_LM, test_data_dir, language, smoothing, 0.2))
-print(preplexity(test_LM, test_data_dir, language, smoothing, 0.5))
+# print(preplexity(test_LM, test_data_dir, language, smoothing, 0.01))
+# print(preplexity(test_LM, test_data_dir, language, smoothing, 0.05))
+# print(preplexity(test_LM, test_data_dir, language, smoothing, 0.1))
+# print(preplexity(test_LM, test_data_dir, language, smoothing, 0.2))
+# print(preplexity(test_LM, test_data_dir, language, smoothing, 0.5))

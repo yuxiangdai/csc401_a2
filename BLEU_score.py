@@ -16,5 +16,7 @@ def BLEU_score(candidate, references, n):
 	"""
 	
 	#TODO: Implement by student.
-            
+	
+
+
     return bleu_score

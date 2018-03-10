@@ -32,7 +32,7 @@ def preprocess(in_sentence, language):
     in_sentence = re.sub(r'();()', r"\1 ; \2", in_sentence) ## semicolons
     in_sentence = re.sub(r'()(\(|\)|\[|\]|\}|\{)()', r"\1 \2 \3", in_sentence) ##  parentheses
     in_sentence = re.sub(r'()\-()', r"\1 - \2", in_sentence) ## dash btw parentheses
-    in_sentence = re.sub(r'()([+-<>=])()', r"\1 \2 \3", in_sentence) ## math
+    in_sentence = re.sub(r'()([+\-<>=])()', r"\1 \2 \3", in_sentence) ## math
     in_sentence = re.sub(r'()(\"+|\'{2,}|\’{2,}|\`{2,})()', r"\1 \2 \3", in_sentence) # quotes
 
     # add more sentence final puncs, or just add all puncs
@@ -46,9 +46,11 @@ def preprocess(in_sentence, language):
         in_sentence = re.sub(r'(puisqu|lorsqu)(\'|\’)(\w+)', r"\1\2 \3", in_sentence) # 4: puisqu', lorsqu'
         
         in_sentence = re.sub(r'd(\'|\’)\w+', daposrepl, in_sentence)
-
+    
+    in_sentence = "SENTSTART " + in_sentence + " SENTEND"
     out_sentence = re.sub(r'()\s+()', r"\1 \2", in_sentence) ## really dumb way to stop repeat spaces
+    
     return out_sentence
 
-# in_sentence = "Right Hon. Jean Chretien (Prime Minister, Lib."
-# preprocess(in_sentence, 'english')
+in_sentence = "4,000"
+preprocess(in_sentence, 'english')

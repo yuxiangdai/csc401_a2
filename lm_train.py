@@ -75,5 +75,5 @@ def lm_train(data_dir, language, fn_LM):
 
 # data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
 # language = "f"
-# fn_LM = "test_f"
+# fn_LM = "Toy_f"
 # lm_train(data_dir, language, fn_LM)
