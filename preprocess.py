@@ -14,18 +14,13 @@ def preprocess(in_sentence, language):
 	OUTPUT:
 	out_sentence: (string) the modified sentence
     """
-    # TODO: Implement Function
 
-
+    # REPL to match these special d' cases, and leave them intact
     def daposrepl(matchobj):
         if matchobj.group(0) in ["d'abord", "d'accord", "d'ailleurs", "d'habitude", "d’abord", "d’accord", "d’ailleurs", "d’habitude"]: 
-            print(matchobj.group(0))
             return matchobj.group(0)
         else: 
             return matchobj.group(0)[:2] + " " + matchobj.group(0)[2:]
-
-
-    # sentence-final punctuation
 
     in_sentence = re.sub(r'(),()', r"\1 , \2", in_sentence) ## commas
     in_sentence = re.sub(r'():()', r"\1 : \2", in_sentence) ## colons
@@ -35,9 +30,7 @@ def preprocess(in_sentence, language):
     in_sentence = re.sub(r'()([+\-<>=])()', r"\1 \2 \3", in_sentence) ## math
     in_sentence = re.sub(r'()(\"+|\'{2,}|\’{2,}|\`{2,})()', r"\1 \2 \3", in_sentence) # quotes
 
-    # add more sentence final puncs, or just add all puncs
-    in_sentence = re.sub(r'()([`~!@#$%^&*\(\)_+{}|:\"<>?\-\=\[\]\;\'.\/,]+( |)+$)', r"\1 \2", in_sentence) # sentence final punctuation
-
+    in_sentence = re.sub(r'()([`~!@#$%^&*\(\)_+{}|:\"<>?\-\=\[\]\;\'.\/,]+( |)+$)', r"\1 \2", in_sentence) # sentence final punctuation (all punctuation)
 
     if language == 'french':
         in_sentence = re.sub(r'(l)(\'|\’)(\w+)', r"\1\2 \3", in_sentence) # 1: separate l'
@@ -48,10 +41,7 @@ def preprocess(in_sentence, language):
         in_sentence = re.sub(r'd(\'|\’)\w+', daposrepl, in_sentence)
     
     in_sentence = "SENTSTART " + in_sentence + " SENTEND"
-    out_sentence = re.sub(r'()\s+()', r"\1 \2", in_sentence) ## really dumb way to stop repeat spaces
+    out_sentence = re.sub(r'()\s+()', r"\1 \2", in_sentence) ## Group together repeat spaces
     
     return out_sentence
 
-## Do Testing here, otherwise leave commented
-# in_sentence = "4,000"
-# preprocess(in_sentence, 'english')

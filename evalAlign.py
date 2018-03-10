@@ -7,14 +7,22 @@ from math import log
 from decode import *
 import pickle
 import os
-
+import csv
 
 def evalAlign(decode_file, LM, AM, *eval_files):
+    
+
+
     with open(decode_file) as f:
         french_lines = f.readlines()
 
     
     for file in eval_files:
+        
+        print("\n")
+        print(file + " sentences")
+        print("\n")
+
         with open(file) as f:
             eng_file = f.readlines()
             
@@ -26,24 +34,17 @@ def evalAlign(decode_file, LM, AM, *eval_files):
 
                 for n in [1,2,3]:
                     bs = BLEU_score(eng_ref, english, n)
-                    print(file, i, n, bs)
+
+                    # Sentence number, n-value, bleu score
+                    print(i + 1, n, bs)
+                    
        
 
-local = True
 
-if(local):
-    decode_file = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Testing/Task5.f"
-    file1 = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Testing/Task5.e"
-    file2 = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Testing/Task5.google.e"
-    data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
-else:
-    decode_file = "/u/cs401/A2_SMT/data/Hansard/Testing/Task5.f"
-    file1 = "/u/cs401/A2_SMT/data/Hansard/Testing/Task5.e"
-    file2 = "/u/cs401/A2_SMT/data/Hansard/Testing/Task5.google.e"
-    data_dir = "/u/cs401/A2_SMT/data/Hansard/Training/"
-
-
-
+decode_file = "/u/cs401/A2_SMT/data/Hansard/Testing/Task5.f"
+file1 = "/u/cs401/A2_SMT/data/Hansard/Testing/Task5.e"
+file2 = "/u/cs401/A2_SMT/data/Hansard/Testing/Task5.google.e"
+data_dir = "/u/cs401/A2_SMT/data/Hansard/Training/"
 
 
 if os.path.exists("e_temp.pickle"):
@@ -52,20 +53,23 @@ if os.path.exists("e_temp.pickle"):
 else:
     LM = lm_train(data_dir, 'e', 'e_temp')
 
-
-
-# for num in [1000, 10000, 15000, 30000]:
-for num in [1000]:
+for num in [1000, 10000, 15000, 30000]:
     max_iter = 5
+
+    print("\n")
+    print(str(num) + " sentences")
+    print("\n")
+
     filename = "AM_ibm1_" + str(num) + "_" + str(max_iter)
     if os.path.exists(filename + ".pickle"):
         with open(filename + '.pickle', 'rb') as handle:
             AM = pickle.load(handle)
     else:
         AM = align_ibm1(data_dir, num, max_iter, filename)
-    
 
     evalAlign(decode_file, LM, AM, file1, file2)
+
+
 
 
 

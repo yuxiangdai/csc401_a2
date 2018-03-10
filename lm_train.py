@@ -25,27 +25,25 @@ def lm_train(data_dir, language, fn_LM):
     e.g., LM['uni']['word'] = 5 		# The word 'word' appears 5 times
           LM['bi']['word']['bird'] = 2 	# The bigram 'word bird' appears 2 times.
     """
-    # Remove for actual
-    
+
     uni = {}
     bi = {}
-    # all of the data ﬁles in data dir that end in either ‘e’ for English or ‘f’ for French
-
     
-    i = 0 
+    # Walk through all files that have the language ending specified
     for root, dirs, files in os.walk(data_dir):
         for file in files:
             if file.endswith("." + language):
-                i += 1
-                print("lm_train:", i)
                 with open(os.path.join(data_dir, file)) as f:
                     for line in f:
+                        # Get rid of \n
                         if line.endswith('\n'):
                             line = line[:-1]
-                        ## Use these two lines once preprocessing is working
+
+                        # Preprocessing
                         edited_line = preprocess(line, language)
                         words = edited_line.split()
-                        # words = line.split()
+
+                        # Enumerate through all unigrams/bigrams
                         for index, word in enumerate(words[:-1]):
                             if word in uni.keys():
                                 uni[word] += 1
@@ -59,6 +57,8 @@ def lm_train(data_dir, language, fn_LM):
                                     bi[word][next_word] = 1
                             else:
                                 bi[word] = {next_word: 1}
+
+                        # Add in the last unigram that was missed
                         last_word = words[-1]
                         if last_word in uni.keys():
                             uni[last_word] += 1
@@ -80,12 +80,7 @@ def lm_train(data_dir, language, fn_LM):
 # lm_train(data_dir, "e", "toy_e_temp")
 # lm_train(data_dir, "f", "toy_f_temp")
 
-
-local = True  # Change to false in FTP
-if(local):
-    data_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
-else:
-    data_dir = "/u/cs401/A2_SMT/data/Hansard/Training/"
+data_dir = "/u/cs401/A2_SMT/data/Hansard/Training/"
 
 ## Create LM_models, uncomment out in final submit
 # lm_train(data_dir, "e", "e_temp")
