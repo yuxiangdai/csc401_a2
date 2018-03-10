@@ -33,31 +33,31 @@ def align_ibm1(train_dir, num_sentences, max_iter, fn_AM):
     AM, sentence_pairs = read_hansard(train_dir, num_sentences)
     
     # Initialize AM uniformly     
-    AM['SENTSTART'] = {}
-    AM['SENTEND'] = {}
-    AM['SENTSTART']['SENTSTART'] = 1 
-    AM['SENTEND']['SENTEND'] = 1
+    AM["SENTSTART"] = {"SENTSTART": 1}
+    AM["SENTEND"] = {"SENTEND": 1}
 
     tcount = {}
     total = {}
     for eng_word in AM.keys():
-        total[eng_word] = 0
-        for fre_word in AM[eng_word].keys(): 
-            if checkef(eng_word, fre_word):
+        if checkef(eng_word, eng_word):
+            total[eng_word] = 0
+            for fre_word in AM[eng_word].keys(): 
                 initialize(eng_word, fre_word, AM)
-                if fre_word not in tcount.keys():
-                    tcount[fre_word] = {eng_word: 0}
+                if eng_word not in tcount.keys():
+                
+                    # tcount[fre_word] = {eng_word: 0}
+                    tcount[eng_word] = {fre_word: 0}
                 else:
-                    tcount[fre_word][eng_word] = 0
+                    tcount[eng_word][fre_word] = 0
 
     # Iterate between E and M steps
     #   for a number of iterations:
     for iteration in range(max_iter):
         print("iter:", iteration)
         #   set tcount(f, e) to 0 for all f, e
-        for fre in tcount.keys(): 
-            for eng in tcount[fre].keys():
-                tcount[fre][eng] = 0
+        for eng in tcount.keys(): 
+            for fre in tcount[eng]:
+                tcount[eng][fre] = 0
         #   set total(e) to 0 for all e
         for eng in total.keys():
             total[eng] = 0
@@ -88,37 +88,34 @@ def read_hansard(train_dir, num_sentences):
     # TODO
     AM = {}
     sentence_pairs = []
-    q = 0
+    num_lines = 0
     for root, dirs, files in os.walk(train_dir):
         for file in files:
             if file.endswith(".e") and file.startswith("hansard"):
-            # if file.endswith(".e"):
                 filename = file[:-2]
-                q += 1
-                print("Readfile:", q)
-                with open(os.path.join(train_dir, filename + ".e")) as f:
-                    english_file = f.readlines()
-                with open(os.path.join(train_dir, filename + ".f")) as f:
-                    french_file = f.readlines()
-
-                for i in range(min(len(english_file), len(french_file), num_sentences)):
-                    line = english_file[i]
-                    line_french = french_file[i]
-                    processed_line = preprocess(line, "e")
-                    processed_line_french = preprocess(line_french, "f")
-                    sentence_pairs.append([processed_line, processed_line_french])
+                if num_lines < num_sentences:
+                    english_file = open(os.path.join(train_dir, filename + ".e"))
+                    french_file = open(os.path.join(train_dir, filename + ".f"))
+                    line = english_file.readline()
+                    line_french = french_file.readline()
+                    
+                    while line and num_lines < num_sentences:
+                        processed_line = preprocess(line, "e")
+                        processed_line_french = preprocess(line_french, "f")
+                        sentence_pairs.append([processed_line, processed_line_french])
                         
-                ## Initialize AM
-
-                    for eng_word in processed_line.split():
-                        
-                        for fre_word in processed_line_french.split():
-                            if eng_word != 'SENTSTART' and eng_word != 'SENTEND' and fre_word != 'SENTSTART' and fre_word != 'SENTEND':
-                                if eng_word in AM.keys():
-                                    if fre_word not in AM[eng_word].keys():
-                                        AM[eng_word][fre_word] = 0    
-                                else:
-                                    AM[eng_word] = {fre_word: 0}
+                        for eng_word in processed_line.split():
+                            for fre_word in processed_line_french.split():
+                                if checkef(eng_word, fre_word):
+                                    if eng_word in AM.keys():
+                                        if fre_word not in AM[eng_word].keys():
+                                            AM[eng_word][fre_word] = 0    
+                                    else:
+                                        AM[eng_word] = {fre_word: 0}
+                        line = english_file.readline()
+                        line_french = french_file.readline()
+                        num_lines += 1
+                        print(filename, num_lines)
 
     return AM, sentence_pairs              
 
@@ -165,7 +162,7 @@ def em_step(tcount, total, AM, sentence_pairs):
                 denom_c += AM[e][f] * F.count(f)
                 # denom_c += AM[e][f] * F.count(f)
             for e in set(Esplit):
-                tcount[f][e] += AM[e][f] * F.count(f) * E.count(e) / denom_c
+                tcount[e][f] += AM[e][f] * F.count(f) * E.count(e) / denom_c
                 total[e] += AM[e][f] * F.count(f) * E.count(e) / denom_c 
     
     end = time.time()
@@ -174,9 +171,8 @@ def em_step(tcount, total, AM, sentence_pairs):
     start = time.time()
 
     for e in total.keys():     
-        for f in tcount.keys():
-            if e in tcount[f].keys():
-                AM[e][f] = tcount[f][e] / total[e]
+        for f in tcount[e]:  
+            AM[e][f] = tcount[e][f] / total[e]
 
     end = time.time()
     seconds = end - start
@@ -209,9 +205,9 @@ def checkef(e, f):
 # fn_AM = "toyIBM"
 # AM = align_ibm1(train_dir, num_sentences, max_iter, fn_AM)
 
-num = 1000
-max_iter = 5
-filename = "AM_ibm1_" + str(num) + "_" + str(max_iter)
+
+num_sentences = 100
+
 train_dir = "/Users/yuxiangdai/Documents/A2_SMT/data/Hansard/Training/"
-AM = align_ibm1(data_dir, num, 5, filename)
-print(str(num) + " sentence AM saved to: " + filename)
+AM = align_ibm1(train_dir, num_sentences, 5, "daniel")
+print("len:", len(AM))
